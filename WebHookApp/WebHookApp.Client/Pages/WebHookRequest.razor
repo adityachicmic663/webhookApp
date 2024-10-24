@@ -1,0 +1,100 @@
+﻿@page "/webhook"
+@inject HttpClient Http
+@using WebHookApp.Client.Models
+@inject NavigationManager Navigation
+@using Microsoft.AspNetCore.SignalR.Client
+
+<h3>Webhook URL Generator</h3>
+
+<button @onclick="GenerateUrl">Generate Webhook URL</button>
+
+@if (!string.IsNullOrEmpty(webhookUrl))
+{
+    <p>Webhook URL: <strong>@webhookUrl</strong></p>
+    <p>Use this URL to send requests.</p>
+}
+
+<h4>Requests Received</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Path</th>
+            <th>Method</th>
+            <th>Date/Time</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in webhookRequests)
+        {
+            <tr>
+                <td>@request.path</td>
+                <td>@request.method</td>
+                <td>@request.timeStamp.ToString("g")</td>
+                <td><button @onclick="() => ViewDetails(request)">View</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (selectedRequest != null)
+{
+    <h5>Request Details</h5>
+    <p><strong>IP Address:</strong> @selectedRequest.ipAddress</p>
+    <p><strong>User-Agent:</strong> @selectedRequest.userAgent</p>
+    <p><strong>Headers:</strong> @selectedRequest.headers</p>
+    <p><strong>Body:</strong> @selectedRequest.body</p>
+    <p><strong>Query Parameters:</strong> @selectedRequest.queryParams</p>
+    <p><strong>Files:</strong> @selectedRequest.files?.Count > 0 ? string.Join(", ", selectedRequest.files) : "No files uploaded."</p>
+}
+
+@code {
+    private string webhookUrl;
+    private List<WebHookRequestModel> webhookRequests = new List<WebHookRequestModel>();
+    private WebHookRequestModel selectedRequest;
+    private HubConnection hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Initialize the SignalR connection
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/webHookHub"))
+            .Build();
+
+        hubConnection.On<WebHookRequestModel>("ReceivedWebHubRequest", (request) =>
+        {
+            // Handle incoming webhook requests
+            webhookRequests.Add(request);
+            StateHasChanged(); // Refresh UI
+        });
+
+        await hubConnection.StartAsync();
+        await GetWebhookRequests();
+    }
+
+    private async Task GenerateUrl()
+    {
+        var response = await Http.GetAsync("api/WebHook");
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
+            webhookUrl = result.data.ToString(); // Assuming your ResponseModel contains the URL in the data property
+        }
+    }
+
+    private async Task GetWebhookRequests()
+    {
+        var response = await Http.GetAsync("api/WebHook/requests");
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
+            webhookRequests = ((List<WebHookRequestModel>)result.data) ?? new List<WebHookRequestModel>();
+        }
+    }
+
+    private void ViewDetails(WebHookRequestModel request)
+    {
+        selectedRequest = request;
+    }
+}

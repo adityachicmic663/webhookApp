@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-16"?><CommunicationConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CommunicateViaTunnel>true</CommunicateViaTunnel>
+  <PlayerIdentifier>1ccf1f669dd241debf8d2717328ced7f</PlayerIdentifier>
+  <ServerAddress>localhost</ServerAddress>
+  <ServerPort>36963</ServerPort>
+  <UserName>SSHTunnelUser</UserName>
+  <Password>Pa55word!</Password>
+  <ControlPort>16232</ControlPort>
+  <DiagnosticsPort>16233</DiagnosticsPort>
+  <InteractivePort>16234</InteractivePort>
+  <ReservedPort>16235</ReservedPort>
+</CommunicationConfiguration>

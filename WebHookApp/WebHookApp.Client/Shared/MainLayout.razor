@@ -1,0 +1,28 @@
+﻿@inherits LayoutComponentBase
+@using WebHookApp.Client.Shared
+
+
+<div class="main">
+    <div class="sidebar">
+        <!-- You can include your navigation here -->
+    </div>
+    <div class="content">
+        @Body
+    </div>
+</div>
+
+<style>
+    .main {
+        display: flex;
+    }
+
+    .sidebar {
+        width: 200px;
+        background-color: #f4f4f4;
+    }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+</style>
