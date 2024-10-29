@@ -63,11 +63,9 @@ namespace WebHookApp.Controllers
         }
         [Consumes("multipart/form-data", "application/json", "application/x-www-form-urlencoded")]
         [HttpDelete("receive/{urlId}")]
-        [HttpGet("receive/{urlId}")]
         [HttpPost("receive/{urlId}")]
         [HttpPatch("receive/{urlId}")]
         [HttpPut("receive/{urlId}")]
-        [HttpHead("receive/{urlId}")]
         [HttpOptions("receive/{urlId}")]
 
         public async Task<IActionResult> ReceiveUrl(Guid urlId, IFormFile? file = null)
@@ -82,7 +80,8 @@ namespace WebHookApp.Controllers
                     string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
                     var userAgent = request.Headers["User-Agent"].ToString();
                     var header = string.Join("; ", request.Headers.Select(h => $"{h.Key}:{h.Value}"));
-                    var body = await new StreamReader(request.Body).ReadToEndAsync();
+                    string body = method != HttpMethods.Options ? await new StreamReader(request.Body).ReadToEndAsync() : string.Empty;
+
 
                     var queryParams = request.Query.ToDictionary(q => q.Key, q => q.Value.ToString());
                     var queryParamsJson = JsonConvert.SerializeObject(queryParams);
@@ -110,6 +109,60 @@ namespace WebHookApp.Controllers
                     });
                 }
             } catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel
+                {
+                    statusCode = 500,
+                    message = "Internal server error",
+                    data = ex.InnerException?.Message ?? ex.Message,
+                    isSuccess = false
+                });
+            }
+        }
+
+        [HttpGet("receive/{urlId}")]
+        [HttpHead("receive/{urlId}")]
+        public async Task<IActionResult> ReceivedUrl(Guid urlId)
+        {
+            var request = HttpContext.Request;
+            try
+            {
+                if (request != null)
+                {
+                    var path = request.Path;
+                    var method = request.Method;
+                    string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                    var userAgent = request.Headers["User-Agent"].ToString();
+                    var header = string.Join("; ", request.Headers.Select(h => $"{h.Key}:{h.Value}"));
+                    var body = await new StreamReader(request.Body).ReadToEndAsync();
+
+                    var queryParams = request.Query.ToDictionary(q => q.Key, q => q.Value.ToString());
+                    var queryParamsJson = JsonConvert.SerializeObject(queryParams);
+
+
+                    var hookRequest = await _webHookService.SaveWebHookRequest(urlId, path, method, ipAddress, userAgent, header, body, queryParamsJson,null);
+
+
+                    return Ok(new ResponseModel
+                    {
+                        statusCode = 200,
+                        message = "your webhook request",
+                        data = hookRequest,
+                        isSuccess = true
+                    });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel
+                    {
+                        statusCode = 404,
+                        message = "not found",
+                        data = "not data",
+                        isSuccess = false
+                    });
+                }
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, new ResponseModel
                 {
@@ -156,7 +209,7 @@ namespace WebHookApp.Controllers
                 });
             }
         }
-        [HttpGet("{urlId}")]
+        [HttpGet("search/{urlId}")]
         public async Task<IActionResult> searchRequest(Guid urlId)
         {
             try

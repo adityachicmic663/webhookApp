@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using WebHookApp;
 using WebHookApp.Hubs;
 using WebHookApp.Services;
@@ -16,7 +18,7 @@ public class Program
         builder.Services.AddServerSideBlazor();
         builder.Services.AddSwaggerGen();
 
-        var connectionString = builder.Configuration.GetConnectionString("DBConn");
+    var connectionString = builder.Configuration.GetConnectionString("DBConn");
 
         builder.Services.AddDbContext<webHookDataContext>(options =>
         {
@@ -26,6 +28,7 @@ public class Program
         builder.Services.AddScoped<IWebHookService, WebHookServices>();
 
         // Build the application
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline
@@ -55,8 +58,9 @@ public class Program
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapRazorPages();
             endpoints.MapHub<webHookHub>("/webhook");
-            endpoints.MapFallbackToFile("index.html"); // Serve Blazor WebAssembly from index.html
+            endpoints.MapFallbackToFile("index.html");       // Serve Blazor WebAssembly from index.html
         });
 
         app.Run();

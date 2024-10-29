@@ -29,7 +29,8 @@ namespace WebHookApp.Client.Services
 
         public async Task<webHookRequest> GetWebHookRequestByIdAsync(int id)
         {
-            return await _httpClient.GetFromJsonAsync<webHookRequest>($"api/webhook/{id}");
+            var response= await _httpClient.GetFromJsonAsync<ResponseModel>($"api/webhook/{id}");
+            return response.isSuccess ? response.data as webHookRequest: null;
         }
     }
 }

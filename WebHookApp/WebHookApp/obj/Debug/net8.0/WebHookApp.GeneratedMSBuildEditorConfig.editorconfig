@@ -17,3 +17,7 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\ChicMic\source\repos\WebHookApp\WebHookApp\WebHookApp
 build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/ChicMic/source/repos/WebHookApp/WebHookApp/WebHookApp/uploadedfiles/WebHook.razor]
+build_metadata.AdditionalFiles.TargetPath = dXBsb2FkZWRmaWxlc1xXZWJIb29rLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 

@@ -4,14 +4,14 @@
 
 <h3>Webhook Request Details</h3>
 
-@if (webhookRequest != null)
+@if (request != null)
 {
-    <p><strong>IP Address:</strong> @webhookRequest.ipAddress</p>
-    <p><strong>User-Agent:</strong> @webhookRequest.userAgent</p>
-    <p><strong>Headers:</strong> @webhookRequest.headers</p>
-    <p><strong>Body:</strong> @webhookRequest.body</p>
-    <p><strong>Query Parameters:</strong> @webhookRequest.queryParams</p>
-    <p><strong>Files:</strong> @webhookRequest.filePath==null?null:@webhookRequest.filePath</p>
+    <p><strong>IP Address:</strong> @request.ipAddress</p>
+    <p><strong>User-Agent:</strong> @request.userAgent</p>
+    <p><strong>Headers:</strong> @request.headers</p>
+    <p><strong>Body:</strong> @request.body</p>
+    <p><strong>Query Parameters:</strong> @request.queryParams</p>
+    <p><strong>Files:</strong> @request.filePath==null?null:@request.filePath</p>
 }
 else
 {
