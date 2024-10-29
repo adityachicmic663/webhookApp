@@ -97,6 +97,7 @@ namespace WebHookApp.Services
             {
                 var response = new WebHookRequest
                 {
+                    requestId= item.requestId,
                     path = item.path,
                     method = item.method,
                     ipAddress = item.ipAddress,
@@ -104,11 +105,39 @@ namespace WebHookApp.Services
                     headers = item.headers,
                     body = item.body,
                     queryParams = item.queryParams,
-                    timeStamp = item.timeStamp
+                    timeStamp = item.timeStamp,
+                    filePath = item.filePath
                 };
                 responseList.Add(response);
             }
             return responseList;
+        }
+
+        public async Task<List<WebHookRequest>> searchRequest(Guid urlId)
+        {
+            var request = await _dataContext.requests.Where(x=>x.urlId == urlId).ToListAsync();
+
+            var responselist=new List<WebHookRequest>();
+
+            foreach(var item in request)
+            {
+                var response = new WebHookRequest()
+                {
+                    requestId = item.requestId,
+                    path = item.path,
+                    method = item.method,
+                    ipAddress = item.ipAddress,
+                    userAgent = item.userAgent,
+                    headers = item.headers,
+                    body = item.body,
+                    queryParams = item.queryParams,
+                    timeStamp = item.timeStamp,
+                    filePath = item.filePath
+                };
+                responselist.Add(response);
+            }
+            return responselist;
+            
         }
     }
 }

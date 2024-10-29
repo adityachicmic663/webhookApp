@@ -14,10 +14,10 @@ namespace WebHookApp.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<WebHookRequest>> GetWebHookRequestsAsync()
+        public async Task<List<webHookRequest>> GetWebHookRequestsAsync()
         {
             var response = await _httpClient.GetFromJsonAsync<ResponseModel>("api/webhook");
-            return response != null && response.isSuccess ? response.data as List<WebHookRequest> : new List<WebHookRequest>();
+            return response != null && response.isSuccess ? response.data as List<webHookRequest> : new List<webHookRequest>();
         }
 
         public async Task<string> GenerateWebHookUrlAsync()
@@ -27,9 +27,9 @@ namespace WebHookApp.Client.Services
             return result != null && result.isSuccess ? result.data.ToString() : null;
         }
 
-        public async Task<WebHookRequest> GetWebHookRequestByIdAsync(int id)
+        public async Task<webHookRequest> GetWebHookRequestByIdAsync(int id)
         {
-            return await _httpClient.GetFromJsonAsync<WebHookRequest>($"api/webhook/{id}");
+            return await _httpClient.GetFromJsonAsync<webHookRequest>($"api/webhook/{id}");
         }
     }
 }

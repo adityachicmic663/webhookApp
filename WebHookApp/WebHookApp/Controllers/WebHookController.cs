@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.IO;
 using System.Net;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
 using WebHookApp.Models;
 using WebHookApp.Services;
 
@@ -59,7 +61,7 @@ namespace WebHookApp.Controllers
                 });
             }
         }
-
+        [Consumes("multipart/form-data", "application/json", "application/x-www-form-urlencoded")]
         [HttpDelete("receive/{urlId}")]
         [HttpGet("receive/{urlId}")]
         [HttpPost("receive/{urlId}")]
@@ -67,8 +69,8 @@ namespace WebHookApp.Controllers
         [HttpPut("receive/{urlId}")]
         [HttpHead("receive/{urlId}")]
         [HttpOptions("receive/{urlId}")]
-       
-        public async Task<IActionResult> ReceiveUrl(Guid urlId,IFormFile? file=null)
+
+        public async Task<IActionResult> ReceiveUrl(Guid urlId, IFormFile? file = null)
         {
             var request = HttpContext.Request;
             try
@@ -79,11 +81,14 @@ namespace WebHookApp.Controllers
                     var method = request.Method;
                     string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
                     var userAgent = request.Headers["User-Agent"].ToString();
-                    var header = string.Join("; ", request.Headers.Select(h=>$"{h.Key}:{h.Value}"));
+                    var header = string.Join("; ", request.Headers.Select(h => $"{h.Key}:{h.Value}"));
                     var body = await new StreamReader(request.Body).ReadToEndAsync();
-                    var queryParams = string.Join("&", request.Query.Select(q => $"{q.Key}={q.Value}"));
 
-                    var hookRequest = await _webHookService.SaveWebHookRequest(urlId,path, method, ipAddress, userAgent, header, body, queryParams,file);
+                    var queryParams = request.Query.ToDictionary(q => q.Key, q => q.Value.ToString());
+                    var queryParamsJson = JsonConvert.SerializeObject(queryParams);
+
+
+                    var hookRequest = await _webHookService.SaveWebHookRequest(urlId, path, method, ipAddress, userAgent, header, body, queryParamsJson, file);
 
 
                     return Ok(new ResponseModel
@@ -104,7 +109,7 @@ namespace WebHookApp.Controllers
                         isSuccess = false
                     });
                 }
-            }catch (Exception ex)
+            } catch (Exception ex)
             {
                 return StatusCode(500, new ResponseModel
                 {
@@ -121,15 +126,15 @@ namespace WebHookApp.Controllers
         {
             try
             {
-                var requests = _webHookService.getRequest();
+                var requests = await _webHookService.getRequest();
 
-                if(requests == null)
+                if (requests == null)
                 {
                     return NotFound(new ResponseModel
                     {
-                        statusCode=404,
-                        message="not found",
-                        data="no data",
+                        statusCode = 404,
+                        message = "not found",
+                        data = "no data",
                         isSuccess = false
                     });
                 }
@@ -140,7 +145,7 @@ namespace WebHookApp.Controllers
                     data = requests,
                     isSuccess = true
                 });
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 return StatusCode(500, new ResponseModel
                 {
@@ -150,6 +155,43 @@ namespace WebHookApp.Controllers
                     isSuccess = false
                 });
             }
+        }
+        [HttpGet("{urlId}")]
+        public async Task<IActionResult> searchRequest(Guid urlId)
+        {
+            try
+            {
+                var list = await _webHookService.searchRequest(urlId);
+
+                if(list == null)
+                {
+                    return NotFound(new ResponseModel
+                    {
+                        statusCode = 404,
+                        message = "no request retrieved",
+                        data="no data",
+                        isSuccess = false
+                    });
+                }
+                return Ok(new ResponseModel
+                {
+                    statusCode = 200,
+                    message = "your response",
+                    data = list,
+                    isSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel
+                {
+                    statusCode = 500,
+                    message = "Internal server error",
+                    data = ex.InnerException?.Message ?? ex.Message,
+                    isSuccess = false
+                });
+            }
+          
         }
     }
 }

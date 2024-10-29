@@ -9,5 +9,7 @@ namespace WebHookApp.Services
 
         Task<List<WebHookRequest>> getRequest();
 
+        Task<List<WebHookRequest>> searchRequest(Guid urlId);
+
     }
 }

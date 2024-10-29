@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj": {}
+    "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj": {
+    "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj",
+        "projectUniqueName": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj",
         "projectName": "WebHookApp.Client",
-        "projectPath": "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj",
-        "packagesPath": "C:\\Users\\Ideapad Slim 3\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp.Client\\obj\\",
+        "projectPath": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj",
+        "packagesPath": "C:\\Users\\ChicMic\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Ideapad Slim 3\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ChicMic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -46,6 +51,11 @@
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.AspNetCore.Components.WebAssembly": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly.DevServer": {
+              "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.10, )"
             },
