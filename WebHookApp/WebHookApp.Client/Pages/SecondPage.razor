@@ -1,27 +1,45 @@
-﻿@page "/webhook/details/{id}"
+﻿@page "/webhook/details/{id:int}"
 @inject HttpClient Http
 @rendermode InteractiveWebAssembly
+@using System.Text.Json
 @using WebHookApp.Client.Models
 
-<h3>Webhook Request Details</h3>
+<h3 class ="webhook-details-title">Webhook Request Details</h3>
 
 @if (request != null)
 {
-    <p><strong>IP Address:</strong> @request.ipAddress</p>
-    <p><strong>User-Agent:</strong> @request.userAgent</p>
-    <p><strong>Headers:</strong> @request.headers</p>
-    <p><strong>Body:</strong> @request.body</p>
-    <p><strong>Query Parameters:</strong> @request.queryParams</p>
-    <p><strong>Files:</strong> @request.filePath==null?null:@request.filePath</p>
+    <div class="webhook-details-container">
+        
+        <div class="detail-box">
+            <p><strong>IP Address:</strong><pre>@request.ipAddress</pre> </p>
+        </div>
+        <div class="detail-box">
+            <p><strong>User-Agent:</strong><pre>@request.userAgent</pre> </p>
+        </div>
+        
+        <div class="detail-box">
+            <p><strong>Headers:</strong> <pre>@request.headers</pre>
+            </p>
+            </div>
+        <div class="detail-box"> <p><strong>Body:</strong><pre>@request.body</pre> </p></div>
+        <div class="detail-box">
+            <p><strong>Query Parameters:</strong><pre>@request.queryParams</pre> </p>
+        </div>
+        <div class="detail-box">
+            <p><strong>Files:</strong> <pre>@request.filePath</pre></p>
+        </div>
+      
+    </div>
+   
 }
 else
 {
-    <p>Loading request details...</p>
+    <p class="loading">Loading request details...</p>
 }
 
 @code {
     [Parameter]
-    public int Id { get; set; }
+    public int id { get; set; }
 
     private webHookRequest request;
 
@@ -32,10 +50,15 @@ else
 
     private async Task LoadRequestDetails()
     {
-        var response = await Http.GetAsync($"api/WebHook/request/{Id}");
+        var response = await Http.GetAsync($"api/WebHook/request/{id}");
         if (response.IsSuccessStatusCode)
         {
-           request = await response.Content.ReadFromJsonAsync<webHookRequest>();
+            var result = await response.Content.ReadFromJsonAsync<ResponseModel>(); 
+            if (result != null)
+            {
+                var data = JsonSerializer.Deserialize<webHookRequest>(JsonSerializer.Serialize(result.data));
+                request = data;
+            }
         }
     }
 }

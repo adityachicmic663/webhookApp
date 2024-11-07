@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -26,6 +27,7 @@ public class Program
         builder.Services.AddSignalR();
         builder.Services.AddServerSideBlazor();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddBlazoredLocalStorage();
 
         
         var connectionString = builder.Configuration.GetConnectionString("DBConn");

@@ -11,5 +11,7 @@ namespace WebHookApp.Services
 
         Task<List<WebHookRequest>> searchRequest(Guid urlId);
 
+        Task<WebHookRequest> getRequestById(int id);
+
     }
 }

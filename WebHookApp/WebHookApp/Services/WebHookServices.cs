@@ -139,5 +139,31 @@ namespace WebHookApp.Services
             return responselist;
             
         }
+
+        public async Task<WebHookRequest> getRequestById(int id)
+        {
+            var request = await _dataContext.requests.FindAsync(id);
+
+            if(request == null)
+            {
+                throw new Exception();
+            }
+            
+            var response = new WebHookRequest
+            {
+                requestId = request.requestId,
+                path = request.path,
+                method = request.method,
+                ipAddress = request.ipAddress,
+                userAgent = request.userAgent,
+                headers = request.headers,
+                body = request.body,
+                queryParams = request.queryParams,
+                timeStamp = request.timeStamp,
+                filePath = request.filePath
+            };
+            return response;
+
+        }
     }
 }
