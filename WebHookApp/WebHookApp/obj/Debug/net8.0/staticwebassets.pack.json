@@ -1,19 +1,19 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp\\wwwroot\\app.css",
+      "Id": "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp\\wwwroot\\app.css",
       "PackagePath": "staticwebassets\\app.css"
     },
     {
-      "Id": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "Id": "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp\\wwwroot\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Id": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "Id": "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp\\wwwroot\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Id": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp\\wwwroot\\favicon.png",
+      "Id": "C:\\Users\\Ideapad Slim 3\\source\\repos\\webhookApp\\WebHookApp\\WebHookApp\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {

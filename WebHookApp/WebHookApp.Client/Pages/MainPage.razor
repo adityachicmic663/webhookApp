@@ -1,16 +1,20 @@
 ﻿@page "/webhook"
 @inject HttpClient Http
-@using WebHookApp.Client.Models
 @inject NavigationManager Navigation
+@using WebHookApp.Client.Models
+@rendermode InteractiveWebAssembly
 @using Microsoft.AspNetCore.SignalR.Client
 
 <h3>Webhook URL Generator</h3>
-<button @onclick="GenerateUrl">Generate Webhook URL</button>
 
-@if (!string.IsNullOrEmpty(@webhookUrl.url))
+@if (!string.IsNullOrEmpty(webhookUrl?.url))
 {
     <p>Webhook URL: <strong>@webhookUrl.url</strong></p>
     <p>Use this URL to send requests.</p>
+}
+else
+{
+    <p>Loading Webhook URL...</p>
 }
 
 <h4>Requests Received</h4>
@@ -24,7 +28,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var request in webhookRequests)
+        @* @foreach (var request in webhookRequests)
         {
             <tr>
                 <td>@request.path</td>
@@ -32,7 +36,7 @@
                 <td>@request.timeStamp.ToString("g")</td>
                 <td><button @onclick="() => ViewDetails(request)">View</button></td>
             </tr>
-        }
+        } *@
     </tbody>
 </table>
 
@@ -48,49 +52,98 @@
 }
 
 @code {
-    private webHookUrlResponse   webhookUrl;
-    private List<webHookRequest> webhookRequests = new List<webHookRequest>();
+    private webHookUrlResponse webhookUrl = new();
+    private List<webHookRequest> webhookRequests = new();
     private webHookRequest selectedRequest;
     private HubConnection hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(Navigation.ToAbsoluteUri("/webHookHub"))
-            .Build();
+        // Generate webhook URL and initialize SignalR connection if successful
+        await GenerateUrl();
 
-        hubConnection.On<webHookRequest>("ReceivedWebHubRequest", (request) =>
+     /*   if (!string.IsNullOrEmpty(webhookUrl?.url))
         {
-            webhookRequests.Add(request);
-            StateHasChanged();
-        });
-
-        await hubConnection.StartAsync();
-        await GetWebhookRequests();
+            InitializeHubConnection();
+            await hubConnection.StartAsync();
+            await GetWebhookRequests();
+        }
+        else
+        {
+            Console.Error.WriteLine("Failed to load webhook URL.");
+        }*/
     }
 
     private async Task GenerateUrl()
     {
-        var response = await Http.GetAsync("api/WebHook");
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
-            webhookUrl.url = result.data.ToString();
+            var response = await Http.GetAsync("api/WebHook");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
+                if (result != null && result.data is webHookUrlResponse responseUrl && !string.IsNullOrEmpty(responseUrl.url))
+                {
+                    webhookUrl = responseUrl;
+                    Console.WriteLine($"Generated Webhook URL: {webhookUrl.url}");
+                }
+                else
+                {
+                    Console.Error.WriteLine("Error: Generated URL response is null or empty.");
+                }
+            }
+            else
+            {
+                Console.Error.WriteLine("Failed to generate Webhook URL.");
+            }
         }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error generating Webhook URL: {ex.Message}");
+        }
+    }
+
+
+    /*private void InitializeHubConnection()
+    {
+        // Configure SignalR connection for real-time updates
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/webHookHub"))
+            .Build();
+
+        // Listen for incoming webhook requests in real-time
+        hubConnection.On<webHookRequest>("ReceivedWebHubRequest", (request) =>
+        {
+            webhookRequests.Add(request);
+            StateHasChanged(); // Update the UI
+        });
     }
 
     private async Task GetWebhookRequests()
     {
-        var response = await Http.GetAsync("api/WebHook/requests");
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
-            webhookRequests = ((List<webHookRequest>)result.data) ?? new List<webHookRequest>();
+            // Retrieve past webhook requests associated with this URL
+            var response = await Http.GetAsync($"api/WebHook/getRequestById/{webhookUrl.urlId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
+                webhookRequests = result?.data as List<webHookRequest> ?? new();
+            }
+            else
+            {
+                Console.Error.WriteLine("Failed to retrieve webhook requests.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error retrieving webhook requests: {ex.Message}");
         }
     }
 
     private void ViewDetails(webHookRequest request)
     {
+        // Display detailed information for the selected request
         selectedRequest = request;
-    }
+    }*/
 }

@@ -11,6 +11,15 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigins", builder =>
+            {
+                builder.WithOrigins("https://localhost:7053") // Replace with Blazor client URL
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
         // Add services to the container
         builder.Services.AddControllers();
         builder.Services.AddRazorPages();
@@ -18,7 +27,8 @@ public class Program
         builder.Services.AddServerSideBlazor();
         builder.Services.AddSwaggerGen();
 
-    var connectionString = builder.Configuration.GetConnectionString("DBConn");
+        
+        var connectionString = builder.Configuration.GetConnectionString("DBConn");
 
         builder.Services.AddDbContext<webHookDataContext>(options =>
         {
@@ -51,7 +61,7 @@ public class Program
         app.UseHttpsRedirection();
         app.UseBlazorFrameworkFiles();
         app.UseStaticFiles();
-       
+        app.UseCors("AllowSpecificOrigins");
 
         app.UseRouting();
 
@@ -59,7 +69,7 @@ public class Program
         {
             endpoints.MapControllers();
             endpoints.MapRazorPages();
-            endpoints.MapHub<webHookHub>("/webhook");
+            endpoints.MapHub<webHookHub>("/webhookHub");
             endpoints.MapFallbackToFile("index.html");       // Serve Blazor WebAssembly from index.html
         });
 

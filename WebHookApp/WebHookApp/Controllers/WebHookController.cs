@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.IO;
 using System.Net;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
+using WebHookApp.Hubs;
 using WebHookApp.Models;
 using WebHookApp.Services;
 
@@ -17,9 +19,12 @@ namespace WebHookApp.Controllers
 
         private readonly IWebHookService _webHookService;
 
-        public WebHookController(IWebHookService webHookService)
+        private readonly IHubContext<webHookHub> _hubContext;
+
+        public WebHookController(IWebHookService webHookService,IHubContext<webHookHub> hubContext)
         {
             _webHookService = webHookService;
+            _hubContext = hubContext;
         }
         [HttpGet]
         public async Task<IActionResult> generateUrl()
@@ -86,10 +91,14 @@ namespace WebHookApp.Controllers
                     var queryParams = request.Query.ToDictionary(q => q.Key, q => q.Value.ToString());
                     var queryParamsJson = JsonConvert.SerializeObject(queryParams);
 
+                   
 
                     var hookRequest = await _webHookService.SaveWebHookRequest(urlId, path, method, ipAddress, userAgent, header, body, queryParamsJson, file);
 
+                    _hubContext.Clients.All.SendAsync("ReceivedWebHubRequest", hookRequest);
+                        
 
+                        
                     return Ok(new ResponseModel
                     {
                         statusCode = 200,
@@ -142,6 +151,7 @@ namespace WebHookApp.Controllers
 
                     var hookRequest = await _webHookService.SaveWebHookRequest(urlId, path, method, ipAddress, userAgent, header, body, queryParamsJson,null);
 
+                    _hubContext.Clients.All.SendAsync("ReceivedWebHubRequest", hookRequest);
 
                     return Ok(new ResponseModel
                     {
@@ -209,7 +219,7 @@ namespace WebHookApp.Controllers
                 });
             }
         }
-        [HttpGet("search/{urlId}")]
+        [HttpGet("getRequestById/{urlId}")]
         public async Task<IActionResult> searchRequest(Guid urlId)
         {
             try

@@ -1,12 +1,12 @@
 {
   "mainAssemblyName": "WebHookApp.Client",
   "resources": {
-    "hash": "sha256-SZjZzsdgmmoDvt/cRQ94ApprrJPLXjGw4MisyDoAXLM=",
+    "hash": "sha256-TMZjMfPscwmkqmYF04LbjgxdCuvBe8PSkAMmCtYvUu4=",
     "jsModuleNative": {
-      "dotnet.native.8.0.3.pdw2cqg4uz.js": "sha256-D4sYBYmDfH/YekgYRgX959/2RG6k28sJSHmcsn+iikk="
+      "dotnet.native.8.0.3.camrh6a257.js": "sha256-D4sYBYmDfH/YekgYRgX959/2RG6k28sJSHmcsn+iikk="
     },
     "jsModuleRuntime": {
-      "dotnet.runtime.8.0.3.adhj56l0bg.js": "sha256-eQgtmRxLcbxYmADDa49CHs/GuJ7nM6d/UFWo4EVhuIw="
+      "dotnet.runtime.8.0.3.s6vuulymqk.js": "sha256-eQgtmRxLcbxYmADDa49CHs/GuJ7nM6d/UFWo4EVhuIw="
     },
     "wasmNative": {
       "dotnet.native.wasm": "sha256-eVeGwMx+BfzNeU727VmCADSEBzGFWGkvJAX0XZdSVkQ="
@@ -216,10 +216,10 @@
       "mscorlib.wasm": "sha256-/xjZuJwCmantx5vGyH5ZZ8keySSTeu+YHKQRJbZzcuM=",
       "netstandard.wasm": "sha256-vuFKmCGJbyv85DrzI6S1ZvCikuhIllH6hqbXIL+fUAA=",
       "System.Private.CoreLib.wasm": "sha256-SZkozEDkHEFN0VaDmhl2HOenGaqTOmHqEGkraz3Aejc=",
-      "WebHookApp.Client.wasm": "sha256-OrQVB2K46VSnKpoCcj/6IKJSRjLn5E1X0uwQmtzHulI="
+      "WebHookApp.Client.wasm": "sha256-dGMZfQpavJoaqHZf1i6D7pMAcGCsDlpXZh7yoj4SrdU="
     },
     "pdb": {
-      "WebHookApp.Client.pdb": "sha256-Tsn6ejWU4sF4p/ZUoxxnGcIAzgrRiOyJrw4tFPq8ElY="
+      "WebHookApp.Client.pdb": "sha256-bxdwI94ylTQSGw0VqnVbXRpMgQk94+TOSr9A4J0lSOQ="
     }
   },
   "cacheBootResources": true,
