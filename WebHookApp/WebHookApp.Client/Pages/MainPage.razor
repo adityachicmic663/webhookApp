@@ -4,18 +4,33 @@
 @inject IJSRuntime JS
 @using System.Text.Json
 @using WebHookApp.Client.Models
-@rendermode InteractiveWebAssembly
+@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.SignalR.Client
 
 <h3 class="page-title">Webhook URL Generator</h3>
 
 @if (!string.IsNullOrEmpty(webhookUrl?.url))
 {
-   <div class="webhook-box">
-        <p>Webhook URL: <strong>@webhookUrl.url</strong></p>
-        <p>Use this URL to send requests.</p>
-   </div>
-   
+    <div class="webhook-box" style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;">
+        <strong>Webhook URL: </strong>
+        <span style="color: #E1E1E2; padding: 6px; background-color: #404141; border-radius: 5px;align-items:center; display: flex; justify-content: space-between;">
+            <span id="webhook-url" href="@webhookUrl?.url" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-wrap:wrap;">@webhookUrl?.url</span>
+            <div @onclick="CopyWebHookUrl" style="border: none; align-items:end; padding: 5px; width:20px;" title="Copy URL">
+
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0,0,256,256"><g fill="#f4f4f4" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M18.5,5c-3.01977,0 -5.5,2.48023 -5.5,5.5v22c0,3.01977 2.48023,5.5 5.5,5.5h16c3.01977,0 5.5,-2.48023 5.5,-5.5v-22c0,-3.01977 -2.48023,-5.5 -5.5,-5.5zM18.5,8h16c1.39823,0 2.5,1.10177 2.5,2.5v22c0,1.39823 -1.10177,2.5 -2.5,2.5h-16c-1.39823,0 -2.5,-1.10177 -2.5,-2.5v-22c0,-1.39823 1.10177,-2.5 2.5,-2.5zM11,10l-1.21875,0.8125c-1.113,0.742 -1.78125,1.99113 -1.78125,3.32813v19.35938c0,5.247 4.253,9.5 9.5,9.5h13.35938c1.338,0 2.58713,-0.66825 3.32813,-1.78125l0.8125,-1.21875h-17.5c-3.59,0 -6.5,-2.91 -6.5,-6.5z"></path></g></g></svg>
+                @* <img src="/css/copy.png" style="height:20px; width:20px;" /> *@
+               @*  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M10 1.5H6a.5.5 0 0 1-.5-.5h5a.5.5 0 0 1-.5.5zm1 2a1.5 1.5 0 0 1 1.5 1.5v10A1.5 1.5 0 0 1 11 16H5a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 5 3.5h1a.5.5 0 0 1 0-1H5A2.5 2.5 0 0 0 2.5 5v10A2.5 2.5 0 0 0 5 17h6a2.5 2.5 0 0 0 2.5-2.5v-10A2.5 2.5 0 0 0 11 2.5h-1a.5.5 0 0 1 0-1h1z" />
+                    <path d="M8 5a.5.5 0 0 0-.5.5V9a.5.5 0 0 0 1 0V5.5A.5.5 0 0 0 8 5z" />
+                </svg> *@
+            </div>
+
+        </span>
+    </div>
 }
 else
 {
@@ -38,7 +53,7 @@ else
             {
                 <tr>
                     <td>@request.path</td>
-                    <td>@request.method</td>
+                    <td><span class="@GetBadgeClass(request.method)">@request.method</span></td>
                     <td>@request.timeStamp.ToString("g")</td>
                     <td><button class="btn-view" @onclick="() => ViewDetails(request)">View</button></td>
                 </tr>
@@ -47,28 +62,83 @@ else
     </table>
 </div>
 
-
-
 @code {
     private webHookUrlResponse webhookUrl;
-    private List<webHookRequest> webhookRequests=new();
+    private List<webHookRequest> webhookRequests = new();
     private HubConnection hubConnection;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string urlId { get; set; }
+
+    [Parameter]
+    public string text{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-       
-            await GenerateUrl();
-           
-        if (!string.IsNullOrEmpty(webhookUrl?.url))
+        // Check if urlId is provided
+        if (!string.IsNullOrEmpty(urlId))
         {
-            webhookRequests.Clear();
-            InitializeHubConnection();
-            await hubConnection.StartAsync();
-            await GetWebhookRequests();
+            // Load webhook URL by ID if urlId is passed in the URL query
+            await LoadWebHookUrlById(urlId);
+
+            // If webhook URL is loaded, fetch the requests and start the SignalR connection
+            if (!string.IsNullOrEmpty(webhookUrl?.url))
+            {
+                await GetWebhookRequests(urlId);  // Fetch webhook requests based on urlId
+                InitializeHubConnection();  // Initialize SignalR connection
+                await hubConnection.StartAsync();
+            }
         }
         else
         {
-            Console.Error.WriteLine("Failed to load webhook URL.");
+            // If no urlId, generate a new URL
+            await GenerateUrl();
+            webhookRequests.Clear(); // Clear previous requests
+            InitializeHubConnection();
+            await hubConnection.StartAsync();
+
+        }
+    }
+    private string GetBadgeClass(string method)
+    {
+        return method switch
+        {
+            "GET" => "badge badge-get",
+            "POST" => "badge badge-post",
+            "DELETE" => "badge badge-delete",
+            "PUT" => "badge badge-put",
+            "HEAD" => "badge badge-head",
+            "PATCH" => "badge badge-patch",
+            "OPIONAL" => "badge badge-optional",
+            _ => "badge"
+        };
+    }
+
+    private async Task CopyTextToClipBoard()
+    {
+        await JS.InvokeVoidAsync("clipboard.copyText", text);
+    }
+
+    private async Task LoadWebHookUrlById(string urlId)
+    {
+        try
+        {
+            // Fetch the webhook URL based on the provided urlId
+            var response = await Http.GetAsync($"api/WebHook/geturl/{urlId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
+                webhookUrl = JsonSerializer.Deserialize<webHookUrlResponse>(JsonSerializer.Serialize(result?.data));
+            }
+            else
+            {
+                Console.Error.WriteLine("Failed to load webhook URL by ID.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error loading webhook URL by ID: {ex.Message}");
         }
     }
 
@@ -76,19 +146,13 @@ else
     {
         try
         {
+            // Generate a new webhook URL if no URL is provided
             var response = await Http.GetAsync("api/WebHook");
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
-                if (result != null /* && result.data is webHookUrlResponse responseUrl && !string.IsNullOrEmpty(responseUrl.url) */)
-                {
-                    webhookUrl = JsonSerializer.Deserialize<webHookUrlResponse>(JsonSerializer.Serialize(result.data));
-                    Console.WriteLine($"Generated Webhook URL: {webhookUrl.url}");
-                }
-                else
-                {
-                    Console.Error.WriteLine("Error: Generated URL response is null or empty.");
-                }
+                webhookUrl = JsonSerializer.Deserialize<webHookUrlResponse>(JsonSerializer.Serialize(result?.data));
+                Console.WriteLine($"Generated Webhook URL: {webhookUrl.url}");
             }
             else
             {
@@ -100,7 +164,6 @@ else
             Console.Error.WriteLine($"Error generating Webhook URL: {ex.Message}");
         }
     }
-
 
     private void InitializeHubConnection()
     {
@@ -114,27 +177,31 @@ else
         {
             var webhookPath = new Uri(webhookUrl.url).AbsolutePath;
 
-            if (request.path.StartsWith(webhookPath))
+            if (request.path.StartsWith(webhookPath) || request.path.Contains(urlId))
             {
                 if (!webhookRequests.Any(r => r.requestId == request.requestId))
                 {
-                    webhookRequests.Add(request);
+                    webhookRequests.Insert(0, request);
                     StateHasChanged(); // Update the UI
                 }
-             }  
+            }
         });
     }
 
-    private async Task GetWebhookRequests()
+    private async Task GetWebhookRequests(string urlId = null)
     {
         try
         {
             // Retrieve past webhook requests associated with this URL
-            var response = await Http.GetAsync($"api/WebHook/getRequestById/{webhookUrl.urlId}");
+            var requestUrl = string.IsNullOrEmpty(urlId) ? $"api/WebHook/getRequestById/{webhookUrl.urlId}" : $"api/WebHook/getRequestById/{urlId}";
+            var response = await Http.GetAsync(requestUrl);
+
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
-                webhookRequests = result?.data as List<webHookRequest> ?? new();
+
+
+                webhookRequests = JsonSerializer.Deserialize < List<webHookRequest>>(JsonSerializer.Serialize(result?.data)).OrderByDescending(x => x.timeStamp).ToList();
             }
             else
             {
@@ -151,5 +218,14 @@ else
     {
         var url = $"/webhook/details/{request.requestId}";
         JS.InvokeVoidAsync("openNewTab", url);
+    }
+
+    private async Task CopyWebHookUrl()
+    {
+        var url = webhookUrl?.url;
+        if (!string.IsNullOrEmpty(url))
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", url);
+        }
     }
 }

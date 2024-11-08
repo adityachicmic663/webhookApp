@@ -165,5 +165,17 @@ namespace WebHookApp.Services
             return response;
 
         }
+
+        public async Task<WebHookUrlResponse> getUrlById(Guid urlId)
+        {
+            var data=await _dataContext.Urls.FindAsync(urlId);
+            var response = new WebHookUrlResponse
+            {
+                urlId = urlId,
+                url = data.url,
+                generatedAt = data.generatedAt
+            };
+            return response;
+        }
     }
 }

@@ -16,6 +16,14 @@
                 alert('Please allow popups for this site to open a new tab.');
             }
         };
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function () {
+                alert('Copied to clipboard!');
+            }, function (err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
     </script>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>

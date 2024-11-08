@@ -36,6 +36,19 @@
         color: #007bff;
     }
 
+
+.copy-icon-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-left: 8px;
+}
+
+    .copy-icon-btn:hover {
+        color: #0056b3;
+    }
 /* Requests Table Style */
 .requests-container {
     margin: 0 auto;
@@ -85,7 +98,7 @@
 /* Button Style */
 .btn-view {
     padding: 6px 12px;
-    background-color: #28a745;
+    background-color: deepskyblue;
     border: none;
     color: white;
     font-size: 0.9rem;
@@ -148,3 +161,41 @@
         margin-top: 10px;
     }
 
+.badge {
+    padding: 0.2em 0.5em;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+}
+
+.badge-get {
+    background-color: green; /* Green for GET */
+}
+
+.badge-post {
+    background-color: #2196F3; /* Blue for POST */
+    color:blue
+}
+
+.badge-put {
+    background-color: #FFC107; /* Yellow for PUT */
+    color: black;
+}
+
+.badge-delete {
+    background-color: #F44336; /* Red for DELETE */
+ 
+}
+
+.badge-patch {
+    background-color:darkmagenta;
+
+}
+
+.badge-head{
+    background-color:darkgreen;
+}
+
+.badge-optional{
+    background-color:deeppink;
+}

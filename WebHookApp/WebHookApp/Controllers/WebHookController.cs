@@ -220,6 +220,7 @@ namespace WebHookApp.Controllers
                 });
             }
         }
+
         [HttpGet("getRequestById/{urlId}")]
         public async Task<IActionResult> searchRequest(Guid urlId)
         {
@@ -282,6 +283,42 @@ namespace WebHookApp.Controllers
                     isSuccess = true
                 });
 
+
+            }catch(Exception ex)
+            {
+                return StatusCode(500, new ResponseModel
+                {
+                    statusCode = 500,
+                    message = "Internal server error",
+                    data = ex.InnerException?.Message ?? ex.Message,
+                    isSuccess = false
+                });
+            }
+        }
+        [HttpGet("geturl/{urlId}")]
+        public async Task<IActionResult> getUrlById(Guid urlId)
+        {
+            try
+            {
+                var url = await _webHookService.getUrlById(urlId);
+
+                if(url == null)
+                {
+                    return NotFound(new ResponseModel
+                    {
+                        statusCode = 404,
+                        message = "no url retrieved",
+                        data = "no data",
+                        isSuccess = false
+                    });
+                }
+                return Ok(new ResponseModel
+                {
+                    statusCode = 200,
+                    message = "your response",
+                    data = url,
+                    isSuccess = true
+                });
 
             }catch(Exception ex)
             {

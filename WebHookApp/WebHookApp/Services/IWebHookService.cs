@@ -13,5 +13,7 @@ namespace WebHookApp.Services
 
         Task<WebHookRequest> getRequestById(int id);
 
+        Task<WebHookUrlResponse> getUrlById(Guid urlId);
+
     }
 }

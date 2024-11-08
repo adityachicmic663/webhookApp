@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "nkQBWWucUyDhtyzwqdKTFUe3+HuHUvDEaRZ+0e5GThI=",
+  "Hash": "Odr5DdS71N+VsL81LDAs9X4yIjZ8NEu+HIzBlj+EdmU=",
   "Source": "WebHookApp.Client",
   "BasePath": "/",
   "Mode": "Default",
@@ -8128,6 +8128,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\app.css"
+    },
+    {
+      "Identity": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\wwwroot\\css\\copy.png",
+      "SourceId": "WebHookApp.Client",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "css/copy.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\copy.png"
     },
     {
       "Identity": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\wwwroot\\index.html",

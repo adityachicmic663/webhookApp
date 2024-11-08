@@ -11,22 +11,27 @@
     <div class="webhook-details-container">
         
         <div class="detail-box">
-            <p><strong>IP Address:</strong><pre>@request.ipAddress</pre> </p>
+            <p><strong>IP Address:</strong>
+               <pre style="color: #E1E1E2; padding: 6px; background-color: #404141; border-radius: 5px;align-items:center; display: flex; justify-content: space-between;">@request.ipAddress</pre>
+            </p>
         </div>
         <div class="detail-box">
-            <p><strong>User-Agent:</strong><pre>@request.userAgent</pre> </p>
+            <p><strong>User-Agent:</strong>
+            <pre style="color: #E1E1E2; padding: 6px; background-color: #404141; border-radius: 5px;align-items:center; display: flex; justify-content: space-between;">@request.userAgent</pre>
+            </p>
         </div>
         
         <div class="detail-box">
-            <p><strong>Headers:</strong> <pre>@request.headers</pre>
+            <p>
+                <strong>Headers:</strong> <pre style="color: #E1E1E2; padding: 6px; background-color: #404141; border-radius: 5px;align-items:center; display: flex; justify-content: space-between;">@request.headers</pre>
             </p>
             </div>
-        <div class="detail-box"> <p><strong>Body:</strong><pre>@request.body</pre> </p></div>
+        <div class="detail-box"> <p><strong>Body:</strong><pre style="color: #E1E1E2; padding: 6px; background-color: #404141; border-radius: 5px;align-items:center; display: flex; justify-content: space-between;">@(string.IsNullOrEmpty(request.body)?"{}": request.body)</pre> </p></div>
         <div class="detail-box">
-            <p><strong>Query Parameters:</strong><pre>@request.queryParams</pre> </p>
+            <p><strong>Query Parameters:</strong><pre style="color: #E1E1E2; padding: 6px; background-color: #404141; border-radius: 5px;align-items:center; display: flex; justify-content: space-between;">@request.queryParams</pre> </p>
         </div>
         <div class="detail-box">
-            <p><strong>Files:</strong> <pre>@request.filePath</pre></p>
+            <p><strong>Files:</strong> <pre style="color: #E1E1E2; padding: 6px; background-color: #404141; border-radius: 5px;align-items:center; display: flex; justify-content: space-between;">@(string.IsNullOrEmpty(request.filePath) ? "{}" : request.filePath)</pre></p>
         </div>
       
     </div>

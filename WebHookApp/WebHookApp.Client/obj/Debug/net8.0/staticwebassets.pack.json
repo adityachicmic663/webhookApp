@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets\\css\\app.css"
     },
     {
+      "Id": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\wwwroot\\css\\copy.png",
+      "PackagePath": "staticwebassets\\css\\copy.png"
+    },
+    {
       "Id": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
