@@ -2,3 +2,4 @@
 /WebHookApp/WebHookApp/bin/*
 /WebHookApp/WebHookApp.Client/bin/*
 /.vs/*
+//WebHookApp/WebHookApp/uploadedfiles/*
