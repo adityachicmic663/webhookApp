@@ -3690,11 +3690,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp\\WebHookApp.csproj",
+      "projectUniqueName": "E:\\Projects\\WebhookTester\\WebHookApp\\WebHookApp\\WebHookApp.csproj",
       "projectName": "WebHookApp",
-      "projectPath": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp\\WebHookApp.csproj",
+      "projectPath": "E:\\Projects\\WebhookTester\\WebHookApp\\WebHookApp\\WebHookApp.csproj",
       "packagesPath": "C:\\Users\\ChicMic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp\\obj\\",
+      "outputPath": "E:\\Projects\\WebhookTester\\WebHookApp\\WebHookApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3716,8 +3716,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj": {
-              "projectPath": "C:\\Users\\ChicMic\\source\\repos\\WebHookApp\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj"
+            "E:\\Projects\\WebhookTester\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj": {
+              "projectPath": "E:\\Projects\\WebhookTester\\WebHookApp\\WebHookApp.Client\\WebHookApp.Client.csproj"
             }
           }
         }
@@ -3787,7 +3787,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
