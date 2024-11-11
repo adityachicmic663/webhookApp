@@ -1,7 +1,8 @@
 ﻿/WebHookApp/WebHookApp/.gitignore
 /WebHookApp/WebHookApp/bin/*
 /WebHookApp/WebHookApp.Client/bin/*
-/.vs/*
 /WebHookApp/WebHookApp/uploadedfiles/*
 /WebHookApp/WebHookApp/obj/*
 /WebHookApp/WebHookApp.Client/obj/*
+/.vs/*
+
